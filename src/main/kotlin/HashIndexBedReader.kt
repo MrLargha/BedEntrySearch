@@ -30,6 +30,9 @@ class HashIndexBedReader : BedReader {
             i++
         }
 
+        // Sort values by start
+        index.values.forEach { chromeData -> chromeData.sortBy { it.start }}
+
         // Write the result using OOS (this is not the fastest way to do it,
         // but in future we can easily implement any another type of serialization)
         val oos = ObjectOutputStream(indexPath.toFile().outputStream())
@@ -59,7 +62,7 @@ class HashIndexBedReader : BedReader {
             end: Int
     ): List<BedEntry> {
         val hashIndex = index as HashIndex
-        val result = hashIndex.findInIndex(chromosome, start, end)
+        val result = hashIndex.findInIndex(chromosome, start, end).sorted()
         // If search in index returns empty list
         if (result.isEmpty()) {
             return emptyList()
@@ -81,6 +84,6 @@ class HashIndexBedReader : BedReader {
             currentPos++
         }
         reader.close()
-        return entries
+        return entries.sortedBy { it.start }
     }
 }

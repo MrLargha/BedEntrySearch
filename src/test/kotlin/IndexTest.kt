@@ -15,10 +15,10 @@ class IndexTest {
         const val BED_FILENAME = "simpleIndexTest.bed"
         const val BED_INDEX_FILENAME = "simpleIndexTest.bedIndx"
         val FILE_SAMPLE = """
-            chr1    2321    3521    2312321 321321, 3213213, 321, 321, 31    321212 fdskajflk
             chr1    4324    6543    2312321 321321, 3213213, 321, 321, 31    321212 fdskajflk
-            chr1    8654    9323    2312321 321321, 3213213, 321, 321, 31    321212 fdskajflk
+            chr1    2321    3521    2312321 321321, 3213213, 321, 321, 31    321212 fdskajflk
             chr2    10213    12122    2312321 321321, 3213213, 321, 321, 31    321212 fdskajflk
+            chr1    8654    9323    2312321 321321, 3213213, 321, 321, 31    321212 fdskajflk
             chr2    232121    4323232    2312321 321321, 3213213, 321, 321, 31  321212 fdskajflk""".trimIndent()
             .replace("    ", "\t")
         val entries = listOf(
