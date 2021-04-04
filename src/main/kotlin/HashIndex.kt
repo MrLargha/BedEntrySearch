@@ -28,13 +28,18 @@ class HashIndex constructor(val indexData: IndexStruct) : BedIndex {
      * @return list of numbers of strings in BED that we are looking for
      */
     fun findInIndex(chromosome: String, start: Int, end: Int): List<Int> {
+        // If chromosome not in file
         if (!indexData.containsKey(chromosome)) {
             return emptyList()
         }
+
+        // If there are a emptyList for chromosome, this is not possible in current implementation
+        // of index creation, but we must check it
         val lst = indexData[chromosome]
         if (lst == null || lst.isEmpty()) {
             return emptyList()
         }
+        // If start index will be -1 after search - desired entries not found
         var startIndex = -1
         for (i in 0..lst.lastIndex) {
             if (lst[i].start >= start) {
@@ -49,8 +54,10 @@ class HashIndex constructor(val indexData: IndexStruct) : BedIndex {
         }
 
         val result = arrayListOf<Int>()
+        // For better performance we ensure capacity of list to maximum possible size of result set
         result.ensureCapacity(lst.size - startIndex)
 
+        // From start index to last element -> check that entry end field meets our requirements
         lst.subList(startIndex, lst.lastIndex + 1).forEach {
             if (it.end < end)
                 result.add(it.id)

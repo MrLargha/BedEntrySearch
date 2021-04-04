@@ -4,6 +4,8 @@ import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 
+
+// Not covered by tests, just for illustration of work
 @ExperimentalPathApi
 fun main(args: Array<String>) {
     println("Welcome to Bed Entry Search!")

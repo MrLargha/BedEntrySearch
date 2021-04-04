@@ -1,5 +1,8 @@
 import java.nio.file.Path
 
+/**
+ * Interface from task
+ */
 interface BedReader {
     /**
      * Creates index for [bedPath] and saves it to [indexPath]

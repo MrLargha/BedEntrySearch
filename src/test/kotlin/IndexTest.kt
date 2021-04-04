@@ -9,7 +9,7 @@ import kotlin.test.*
  */
 class IndexTest {
     /**
-     * Filenames, and test file content
+     * Filenames, entries for validating search, and test file content
      */
     companion object {
         const val BED_FILENAME = "simpleIndexTest.bed"

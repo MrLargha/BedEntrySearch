@@ -19,6 +19,7 @@ class HashIndexBedReader : BedReader {
         val index = mutableMapOf<String, MutableList<HashIndex.IndexedObject>>()
         var i = 0
         reader.lines().forEach {
+            // BED file is tab-separated, so we need to find strings that have at least 2 tabs
             val splt = it.split("\t")
             if (splt.size >= 3) {
                 if (!index.containsKey(splt.first())) {
@@ -28,6 +29,9 @@ class HashIndexBedReader : BedReader {
             }
             i++
         }
+
+        // Write the result using OOS (this is not the fastest way to do it,
+        // but in future we can easily implement any another type of serialization)
         val oos = ObjectOutputStream(indexPath.toFile().outputStream())
         oos.writeObject(index)
         oos.flush()
@@ -37,6 +41,7 @@ class HashIndexBedReader : BedReader {
     override fun loadIndex(indexPath: Path): BedIndex {
         val ios = ObjectInputStream(indexPath.toFile().inputStream())
         return try {
+            // Parse index data from file, I don't know how not to use unsafe cast in this situation
             @Suppress("UNCHECKED_CAST")
             HashIndex(ios.readObject() as IndexStruct)
         } catch (e: ClassCastException) {
@@ -55,14 +60,16 @@ class HashIndexBedReader : BedReader {
     ): List<BedEntry> {
         val hashIndex = index as HashIndex
         val result = hashIndex.findInIndex(chromosome, start, end)
+        // If search in index returns empty list
         if (result.isEmpty()) {
             return emptyList()
         }
         val reader = BufferedReader(InputStreamReader(bedPath.toFile().inputStream()))
-        var currentPos = 0
+        var currentPos = 0 // current position in file
         val entries = mutableListOf<BedEntry>()
         for (entryID in result) {
             if (currentPos != entryID) {
+                // Skip some lines to desired string
                 repeat(entryID - currentPos) {
                     reader.readLine()
                 }
